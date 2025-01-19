@@ -192,7 +192,7 @@ class SRNN_bfd(nn.Module):
         return output, h_state, _, _
 
 
-def train(init_b=0.04, init_w=0.06, batch_size=128):
+def train(init_b=0.03, init_w=0.05, batch_size=128):
     input_dim, output_dim, seq_dim = 31*18, 3, 110
     train_dataset = RealValued_Whisker_Dataset('/data/mosttfzhu/RSNN_bfd/data/whisker/snn_train3.h5',dt=5)
     test_dataset = RealValued_Whisker_Dataset('/data/mosttfzhu/RSNN_bfd/data/whisker/snn_test3.h5',dt=5)
@@ -255,9 +255,8 @@ def train(init_b=0.04, init_w=0.06, batch_size=128):
             # torch.save(model, './RSNN_bfd.pth')
             best_accuracy = test_acc
         print('epoch: ', epoch, '. Test Acc: ', test_acc, '. Best Acc: ', best_accuracy)
-    return best_accuracy
 
 if __name__ == '__main__':
-    acc = train(init_b=0.03, init_w=0.05, batch_size=128)
-    print(acc)
+    train(init_b=0.03, init_w=0.05, batch_size=128)
+
 
