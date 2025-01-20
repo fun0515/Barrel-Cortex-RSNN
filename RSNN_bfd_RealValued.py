@@ -142,7 +142,7 @@ class SRNN_bfd(nn.Module):
         params_base = []
         for module in self.toPops:
             params_base.extend(list(module.parameters()))
-        params_base.extend(list(self.barrelloid.parameters()) + list(self.ThtoPops.parameters()) + list(self.fc2_1.parameters())+list(self.fc2_2.parameters()))
+        params_base.extend(list(self.fc.parameters()) + list(self.barrelloid.parameters()) + list(self.ThtoPops.parameters()) + list(self.fc2_1.parameters())+list(self.fc2_2.parameters()))
         params_tau_adp = self.tau_adp + [self.barrelloid_tau_adp]
         params_tau_m = self.tau_m + [self.barrelloid_tau_m]
         return params_base, params_tau_adp, params_tau_m
