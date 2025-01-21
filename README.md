@@ -1,5 +1,5 @@
 # BarrelCortexRSNN  
-Train and evaluate a recurrent spiking neural network that is biologically constrained by the mouse barrel cortex. The paper is [here](https://markdown.com.cn](https://openreview.net/forum?id=UvfI4grcM7&referrer=%5BAuthor%20Console%5D(%2Fgroup%3Fid%3DICLR.cc%2F2025%2FConference%2FAuthors%23your-submissions))).
+Train and evaluate a recurrent spiking neural network that is biologically constrained by the mouse barrel cortex. The paper is [here](https://openreview.net/forum?id=UvfI4grcM7&referrer=%5BAuthor%20Console%5D(%2Fgroup%3Fid%3DICLR.cc%2F2025%2FConference%2FAuthors%23your-submissions)).
 # Dependencies
 Python==3.8, h5py==3.10.0, pytorch==2.1.1. 
 Install the dependencies from the requirements.txt file:   
@@ -12,3 +12,8 @@ Install the dependencies from the requirements.txt file:
 * `RSNN_bfd_whisker_deprivation.py`: Test the performance of the trained model in response to the whisker deprivation experiment.
 * `SparseLinear.py`: Sample the connections between neural subtypes based on projection intensities.
 * `utils.py`: Plot the neural raster, dynamic gradient, weighted degree distribution, and CV measure.
+# Dataset
+The whisker sweep dataset used was modified from this [repository](https://github.com/neuroailab/whisker_model). We are grateful to the author for providing us with the `v-hacd` processed 3D .hdf5 files. To be frank, compiling this project was quite troublesome, so it is recommended to directly download the [.h5 files](https://pan.quark.cn/s/6d41efaccd6c) that we have processed.
+
+The neuron types, quantities, and connection probabilities referred to by our model are from this [repository](https://github.com/DepartmentofNeurophysiology/Cortical-representation-of-touch-in-silico-NetPyne). We have replicated the network constructed based on `NetPyNE`, and then calculated the connection probabilities by `connection quantity / (the number of presynaptic neurons × the number of postsynaptic neurons)`.
+# Train
