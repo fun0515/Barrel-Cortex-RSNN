@@ -289,7 +289,7 @@ def test_whisker_deprivation(model, batch_size=128):
                 index = deprived_whiskers(30, num_deprived_whiskers)
             print("Index of deprived whiskers: ", index)
 
-            test_dataset = Whisker_Dataset_Deprivation('/data/mosttfzhu/RSNN_bfd/data/whisker/snn_test3.h5',index,dt=5)
+            test_dataset = Whisker_Dataset_Deprivation('./data/snn_test3.h5',index,dt=5)
             test_loader = data.DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
 
             with torch.no_grad():
