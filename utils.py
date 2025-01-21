@@ -370,5 +370,5 @@ if __name__ == '__main__':
     plot_degree_distribution(initial_weight, trained_weight)
 
     # raster plot
-    simulate(trained_model)
+    simulate(trained_model.cuda())
 
