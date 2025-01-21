@@ -272,7 +272,7 @@ class SRNN_bfd(nn.Module):
 
 def test_whisker_deprivation(model, batch_size=128):
     input_dim, output_dim, seq_dim = 31*3, 3, 550
-    cut_whiskers = [1,2,3,4,5,6,7,8,9,10]
+    cut_whiskers = [1,2,3,4,5,6,7,8]
     model.eval()
     test_all = []
     test_mean = []
