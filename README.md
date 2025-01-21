@@ -18,10 +18,11 @@ The whisker sweep dataset used was modified from this [repository](https://githu
 
 The neuron types, quantities, and connection probabilities referred to by our model are from this [repository](https://github.com/DepartmentofNeurophysiology/Cortical-representation-of-touch-in-silico-NetPyne). We have replicated the network constructed based on `NetPyNE`, and then calculated the connection probabilities by `connection quantity / (the number of presynaptic neurons × the number of postsynaptic neurons)`.
 # Train
-The code is almost one-click runnable. Once the dataset `.h5` files are correctly placed under the `./data/` path, running `RSNN_bfd_RealValued.py` and `RSNN_bfd_SpikingBased.py` will train the model on the real-valued and spiking-based whikser sweep dataset, respectively. For example:
+The codes are one-click runnable. Once the dataset `.h5` files are correctly placed under the `./data/` path, running `RSNN_bfd_RealValued.py` and `RSNN_bfd_SpikingBased.py` will train the model on the real-valued and spiking-based whikser sweep dataset, respectively. For example:
 ```python
 #./RSNN_bfd_SpikingBased.py
 if __name__ == '__main__':  
     train(init_b=0.04, init_w=0.06, batch_size=128)
 ```
-
+# Evaluation
+## Whisker Deprivation
