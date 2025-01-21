@@ -1,4 +1,4 @@
-# SRNN_bfd
+# RSNN_bfd
 ![outline](./Fig_outline.png "Outline")
 Train and evaluate a spiking recurrent neural network that is biologically constrained by the mouse barrel cortex. The paper is [here](https://openreview.net/forum?id=UvfI4grcM7&referrer=%5BAuthor%20Console%5D(%2Fgroup%3Fid%3DICLR.cc%2F2025%2FConference%2FAuthors%23your-submissions)).
 # Dependencies
