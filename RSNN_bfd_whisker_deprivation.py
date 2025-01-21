@@ -1,11 +1,8 @@
 import matplotlib.pyplot as plt
-from tqdm import tqdm
 import numpy as np
-import math
 import torch
 import h5py
 import torch.nn as nn
-from torch.optim.lr_scheduler import StepLR
 import math
 import torch.nn.functional as F
 from torch.utils import data
@@ -33,9 +30,9 @@ num_classes = 3
 def readPops():
     popType = ['E','E','I','I','E','I','I','I','I','I','I','I','I']
     popSize = [440,934,94,93,2232,106,4,55,64,64,34,60,38]
-    Exc_ThtoAll = np.load(r'/data/mosttfzhu/RSNN_bfd/data/ProbConn/Exc_ThtoAll_prob.npy')[0]
-    Exc_AlltoAll = np.load(r'/data/mosttfzhu/RSNN_bfd/data/ProbConn/Exc_AlltoAll_prob.npy')
-    Inh_AlltoAll = np.load(r'/data/mosttfzhu/RSNN_bfd/data/ProbConn/Inh_AlltoAll_prob.npy')
+    Exc_ThtoAll = np.load(r'./data/Exc_ThtoAll_prob.npy')[0]
+    Exc_AlltoAll = np.load(r'./data/Exc_AlltoAll_prob.npy')
+    Inh_AlltoAll = np.load(r'./data/Inh_AlltoAll_prob.npy')
     Prob_AlltoAll = Exc_AlltoAll+Inh_AlltoAll
     Type_AlltoAll = np.where(Exc_AlltoAll > 0, 1., 0.)
     Type_AlltoAll = np.where(Inh_AlltoAll > 0, -1., Type_AlltoAll)
@@ -319,6 +316,5 @@ def test_whisker_deprivation(model, batch_size=128):
 
 ###############################
 if __name__ == '__main__':
-    trained_model = torch.load('/data/mosttfzhu/RSNN_bfd/Adp_LIF_RSNN_bfd_seed515_0.03b_0.05w.pth',
-                               map_location='cuda')
+    trained_model = torch.load('./data/RSNN_bfd_0.03b_0.05w.pth',map_location='cuda')
     test_whisker_deprivation(model=trained_model, batch_size=128)
