@@ -1,17 +1,14 @@
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 import numpy as np
-import math
 import torch
 import torch.nn as nn
 from torch.optim.lr_scheduler import StepLR
 import math
-import seaborn as sns
-from scipy.stats import f_oneway
 import torch.nn.functional as F
 from SparseLinear import SparseLinear2
 from whisker_dataset import RealValued_Whisker_Dataset
-from utils import single_neuron_dy, plot_forwardRaster, plot_5fr
+
 torch.manual_seed(515)
 plt.rcParams['font.family'] = ['Times New Roman', 'serif']
 plt.rcParams['font.size'] = 22
@@ -27,9 +24,9 @@ gamma = .5  # gradient scale
 def readPops():
     popType = ['E','E','I','I','E','I','I','I','I','I','I','I','I']
     popSize = [440,934,94,93,2232,106,4,55,64,64,34,60,38]
-    Exc_ThtoAll = np.load(r'/data/mosttfzhu/RSNN_bfd/data/ProbConn/Exc_ThtoAll_prob.npy')[0]
-    Exc_AlltoAll = np.load(r'/data/mosttfzhu/RSNN_bfd/data/ProbConn/Exc_AlltoAll_prob.npy')
-    Inh_AlltoAll = np.load(r'/data/mosttfzhu/RSNN_bfd/data/ProbConn/Inh_AlltoAll_prob.npy')
+    Exc_ThtoAll = np.load(r'./data/Exc_ThtoAll_prob.npy')[0]
+    Exc_AlltoAll = np.load(r'./data/Exc_AlltoAll_prob.npy')
+    Inh_AlltoAll = np.load(r'./data/Inh_AlltoAll_prob.npy')
     Prob_AlltoAll = Exc_AlltoAll+Inh_AlltoAll
     Type_AlltoAll = np.where(Exc_AlltoAll > 0, 1., 0.)
     Type_AlltoAll = np.where(Inh_AlltoAll > 0, -1., Type_AlltoAll)
@@ -194,8 +191,8 @@ class SRNN_bfd(nn.Module):
 
 def train(init_b=0.03, init_w=0.05, batch_size=128):
     input_dim, output_dim, seq_dim = 31*18, 3, 110
-    train_dataset = RealValued_Whisker_Dataset('/data/mosttfzhu/RSNN_bfd/data/whisker/snn_train3.h5',dt=5)
-    test_dataset = RealValued_Whisker_Dataset('/data/mosttfzhu/RSNN_bfd/data/whisker/snn_test3.h5',dt=5)
+    train_dataset = RealValued_Whisker_Dataset('./data/snn_train3.h5',dt=5)
+    test_dataset = RealValued_Whisker_Dataset('./data/snn_test3.h5',dt=5)
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
     test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
     model = SRNN_bfd(input_dim, output_dim, init_b = init_b, init_w = init_w)
@@ -224,7 +221,6 @@ def train(init_b=0.03, init_w=0.05, batch_size=128):
             outputs, h,_,_ = model(input)
             loss = criterion(outputs/seq_dim, labels)
             loss.backward()
-
 
             # Updating parameters
             optimizer.step()

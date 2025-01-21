@@ -17,7 +17,7 @@ plt.rcParams['font.family'] = ['Times New Roman', 'serif']
 plt.rcParams['font.size'] = 22
 
 lens = 0.5  # hyper-parameters of approximate function
-num_epochs = 100 # 150  # n_iters / (len(train_dataset) / batch_size)
+num_epochs = 100
 
 b_j0 = 0.04
 R_m = 1  # membrane resistance
@@ -27,9 +27,9 @@ gamma = .5  # gradient scale
 def readPops():
     popType = ['E','E','I','I','E','I','I','I','I','I','I','I','I']
     popSize = [440,934,94,93,2232,106,4,55,64,64,34,60,38]
-    Exc_ThtoAll = np.load(r'/data/mosttfzhu/RSNN_bfd/data/ProbConn/Exc_ThtoAll_prob.npy')[0]
-    Exc_AlltoAll = np.load(r'/data/mosttfzhu/RSNN_bfd/data/ProbConn/Exc_AlltoAll_prob.npy')
-    Inh_AlltoAll = np.load(r'/data/mosttfzhu/RSNN_bfd/data/ProbConn/Inh_AlltoAll_prob.npy')
+    Exc_ThtoAll = np.load('./data/Exc_ThtoAll_prob.npy')[0]
+    Exc_AlltoAll = np.load('./data/Exc_AlltoAll_prob.npy')
+    Inh_AlltoAll = np.load('./data/Inh_AlltoAll_prob.npy')
     Prob_AlltoAll = Exc_AlltoAll+Inh_AlltoAll
     Type_AlltoAll = np.where(Exc_AlltoAll > 0, 1., 0.)
     Type_AlltoAll = np.where(Inh_AlltoAll > 0, -1., Type_AlltoAll)
@@ -191,8 +191,8 @@ class SRNN_bfd(nn.Module):
 
 def train(init_b=0.04, init_w=0.06, batch_size=128):
     input_dim, output_dim, seq_dim = 31*3, 3, 550
-    train_dataset = SpikingBased_Whisker_Dataset('/data/mosttfzhu/RSNN_bfd/data/whisker/snn_train3.h5',dt=5)
-    test_dataset = SpikingBased_Whisker_Dataset('/data/mosttfzhu/RSNN_bfd/data/whisker/snn_test3.h5',dt=5)
+    train_dataset = SpikingBased_Whisker_Dataset('./data/snn_train3.h5',dt=5)
+    test_dataset = SpikingBased_Whisker_Dataset('./data/snn_test3.h5',dt=5)
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
     test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
     model = SRNN_bfd(input_dim, output_dim, init_b = init_b, init_w = init_w)
@@ -208,9 +208,9 @@ def train(init_b=0.04, init_w=0.06, batch_size=128):
         {'params': params_tau_adp, 'lr': learning_rate * 5},
         {'params': params_tau_m, 'lr': learning_rate * 2}])
 
-    scheduler = StepLR(optimizer, step_size=10, gamma=.5)
+    scheduler = StepLR(optimizer, step_size=20, gamma=.8)
 
-    best_accuracy = 0
+    best_accuracy = 0.79
     for epoch in range(num_epochs):
         train_correct = 0
         train_total = 0
@@ -221,7 +221,6 @@ def train(init_b=0.04, init_w=0.06, batch_size=128):
             outputs, h,_,_ = model(input)
             loss = criterion(outputs/seq_dim, labels)
             loss.backward()
-
 
             # Updating parameters
             optimizer.step()
@@ -257,8 +256,8 @@ def ANOVA(model):
     # 分析三类神经元活动是否存在显著特异性，找出特异性神经元并可视化
     T = 110 * 5
     h_state = []
-    train_dataset = SpikingBased_Whisker_Dataset('/data/mosttfzhu/RSNN_bfd/data/whisker/snn_train3.h5')
-    test_dataset = SpikingBased_Whisker_Dataset('/data/mosttfzhu/RSNN_bfd/data/whisker/snn_test3.h5')
+    train_dataset = SpikingBased_Whisker_Dataset('./data/snn_train3.h5')
+    test_dataset = SpikingBased_Whisker_Dataset('./data/snn_test3.h5')
     train_data0, train_data1, train_data2 = train_dataset.type_specific_data()
     test_data0, test_data1, test_data2 = test_dataset.type_specific_data()
     data0, data1, data2 = np.concatenate((train_data0, test_data0), axis=0), np.concatenate((train_data1, test_data1),
@@ -310,8 +309,6 @@ def ANOVA(model):
     index[significant_index] = 1.
     significant_cells = neuron_coords[np.where(index==1.)[0]]
     unsignificant_cells = neuron_coords[np.where(index==0.)[0]]
-    print(firing_proportion[np.where(index==0.)[0]])
-    print(np.max(firing_proportion[np.where(index==0.)[0]]))
 
     # 绘制散点图, 三条线段分别指代三个类别
     plt.figure(figsize=(8,8))
@@ -353,7 +350,6 @@ if __name__ == '__main__':
     train(init_b=0.04, init_w=0.06, batch_size=128)
 
     # plot neural firing selectivity
-    # trained_model = torch.load('/data/mosttfzhu/RSNN_bfd/Adp_LIF_RSNN_bfd_seed515_0.04b_0.06w_batchsize128_0.818.pth',
-    #                            map_location='cuda')
-    # ANOVA(model=trained_model)
+    trained_model = torch.load('./data/RSNN_bfd_0.04b_0.06w.pth',map_location='cuda')
+    ANOVA(model=trained_model)
 

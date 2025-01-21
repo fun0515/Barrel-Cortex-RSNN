@@ -95,7 +95,7 @@ def plot_forwardRaster(h, sample, seq_len):
 
     # 获取并设置边框线的粗细
     for spine in plt.gca().spines.values():
-        spine.set_linewidth(1.3)  # 设置边框线的粗细为3
+        spine.set_linewidth(1.3)
 
     plt.show()
 
@@ -127,14 +127,13 @@ def NAOI_along_weights():
     b_list = [0.01 * i for i in range(1, 61)]
     naoi_array = np.zeros((4, 60))
     T = 550
-    train_dataset = SpikingBased_Whisker_Dataset('/data/mosttfzhu/RSNN_bfd/data/whisker/snn_train3.h5')
-    test_dataset = SpikingBased_Whisker_Dataset('/data/mosttfzhu/RSNN_bfd/data/whisker/snn_test3.h5')
+    train_dataset = SpikingBased_Whisker_Dataset('./data/snn_train3.h5')
+    test_dataset = SpikingBased_Whisker_Dataset('./data/snn_test3.h5')
     train_data0, train_data1, train_data2 = train_dataset.type_specific_data()
     test_data0, test_data1, test_data2 = test_dataset.type_specific_data()
     data0, data1, data2 = np.concatenate((train_data0, test_data0), axis=0), np.concatenate(
         (train_data1, test_data1),axis=0), np.concatenate((train_data2, test_data2), axis=0)
     data = np.concatenate((data0, data1,data1), axis=0)
-    print(data.shape)
 
     with torch.no_grad():   # 不然会占用很多显存
         for i,w in enumerate(w_list):
@@ -163,7 +162,7 @@ def cal_conn_matrix(model=None):
 
     toPops = model.toPops
     for i in range(Type_AlltoAll.shape[1]):     # 列
-        count = 0 # toPops是紧凑的，与Type_AlltoAll的索引完全一致
+        count = 0
         for j in range(Type_AlltoAll.shape[0]): # 行
             if Type_AlltoAll[j][i] != 0:
                 conn_matrix[popSize[j]:popSize[j+1],popSize[i]:popSize[i+1]] = toPops[i][count].weight.data.numpy().transpose(1,0)
@@ -340,8 +339,8 @@ def neuro_dymodel(model, show='L4',parameter='m'):
 def simulate(model):
     T = 550
     sample = 15
-    train_dataset = SpikingBased_Whisker_Dataset('/data/mosttfzhu/RSNN_bfd/data/whisker/snn_train3.h5')
-    test_dataset = SpikingBased_Whisker_Dataset('/data/mosttfzhu/RSNN_bfd/data/whisker/snn_test3.h5')
+    train_dataset = SpikingBased_Whisker_Dataset('./data/snn_train3.h5')
+    test_dataset = SpikingBased_Whisker_Dataset('./data/snn_test3.h5')
     train_data0, train_data1, train_data2 = train_dataset.type_specific_data()
     test_data0, test_data1, test_data2 = test_dataset.type_specific_data()
     data0, data1, data2 = np.concatenate((train_data0,test_data0),axis=0),np.concatenate((train_data1,test_data1),axis=0),np.concatenate((train_data2,test_data2),axis=0)
@@ -357,12 +356,11 @@ def simulate(model):
     plot_5fr(h_state[sample])
 
 if __name__ == '__main__':
-    # CV measure on spiking Whisker sweep dataset
+    # CV measure on spiking whisker sweep dataset
     NAOI_along_weights()
 
     # show neural dynamics of trained model
-    trained_model = torch.load('/data/mosttfzhu/RSNN_bfd/Adp_LIF_RSNN_bfd_seed515_0.04b_0.06w_batchsize128_0.818.pth',
-                       map_location='cuda')
+    trained_model = torch.load('./data/RSNN_bfd_0.04b_0.06w.pth', map_location='cuda')
     neuro_dymodel(model=trained_model, show='L4',parameter='m')
 
     # plot weight distribution of initial and trained model

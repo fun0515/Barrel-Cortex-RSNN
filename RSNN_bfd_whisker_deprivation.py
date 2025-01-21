@@ -111,9 +111,6 @@ class Whisker_Dataset_Deprivation(Dataset):
         f_mod_log = np.log(self.force_mod)
         prob_f = sigmoid(f_mod_log, c=2)
 
-        #print("------check spike prob------")
-        #print(prob_f[:,:,:,self.combs,:])
-        #print(not (np.any(prob_f[:,:,:,self.std,:])))
         spike_f = generate_spike_train(prob_f, dt=self.dt)
 
         t_mod_log = np.log(self.torque_mod)

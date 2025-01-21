@@ -1,12 +1,8 @@
-import os
 import torch
 import h5py
 import matplotlib.pyplot as plt
-import torch.nn as nn
-from torch.optim import lr_scheduler
 import torch.nn.functional as F
 from torch.utils.data import Dataset, DataLoader
-# from RSNN_model import RSNN_bfd2
 import numpy as np
 np.random.seed(515)
 plt.rcParams['font.family'] = ['Times New Roman', 'serif']
@@ -42,7 +38,6 @@ def generate_spike_train(prob,dt, verify=False):
         for spine in plt.gca().spines.values():
             spine.set_linewidth(1.8)
 
-        plt.savefig('/data/mosttfzhu/RSNN_bfd/figs/sampling_spikes.png',bbox_inches='tight',dpi=2000)
         plt.show()
         exit()
 
@@ -107,15 +102,6 @@ class RealValued_Whisker_Dataset(Dataset):
             label[label == 53.] = 0 # 53：helmet, 55:box, 113:plane
             label[label == 55.] = 1
             label[label == 113.] = 2
-            # label[label == 102.] = 3
-            #
-            # # 找出所有标签为2或3的样本的索引
-            # keep_indices = np.where((label == 0) | (label == 1))[0]
-            #
-            # # 使用这些索引来筛选data和label
-            # data_force = data_force[keep_indices]
-            # data_torque = data_torque[keep_indices]
-            # label = label[keep_indices]
 
         data_force, data_torque = F.normalize(torch.tensor(data_force)), F.normalize(torch.tensor(data_torque))
         self.ft = np.concatenate((data_force, data_torque),axis=-1)
@@ -126,8 +112,6 @@ class RealValued_Whisker_Dataset(Dataset):
         return self.label.shape[0]
 
     def __getitem__(self,idx):
-        # sample = F.normalize(torch.tensor(self.force_mod[idx], dtype=torch.float32))
-        # sample = self.cnn[idx]
         sample = torch.tensor(self.ft[idx], dtype=torch.float32)
         return sample, torch.tensor(self.label[idx], dtype=torch.int64)
 
