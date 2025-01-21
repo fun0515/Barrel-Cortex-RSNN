@@ -1,8 +1,9 @@
 # BarrelCortexRSNN  
+![outline](./Fig_outline.png "Outline")
 Train and evaluate a recurrent spiking neural network that is biologically constrained by the mouse barrel cortex. The paper is [here](https://openreview.net/forum?id=UvfI4grcM7&referrer=%5BAuthor%20Console%5D(%2Fgroup%3Fid%3DICLR.cc%2F2025%2FConference%2FAuthors%23your-submissions)).
 # Dependencies
 Python==3.8, h5py==3.10.0, pytorch==2.1.1. 
-Install the dependencies from the requirements.txt file:   
+Install the dependencies from the `requirements.txt` file:   
 `pip install -r requirements.txt`
 # File Description
 * `/data/`:  Three `.npy` files that store the anatomical information of the barrel cortex, two `.h5` files of datasets, and some additional trained `.pth` files. The `.h5` and `.pth` files can be downloaded from [here](https://pan.quark.cn/s/6d41efaccd6c).
@@ -17,3 +18,10 @@ The whisker sweep dataset used was modified from this [repository](https://githu
 
 The neuron types, quantities, and connection probabilities referred to by our model are from this [repository](https://github.com/DepartmentofNeurophysiology/Cortical-representation-of-touch-in-silico-NetPyne). We have replicated the network constructed based on `NetPyNE`, and then calculated the connection probabilities by `connection quantity / (the number of presynaptic neurons × the number of postsynaptic neurons)`.
 # Train
+The code is almost one-click runnable. Once the dataset `.h5` files are correctly placed under the `./data/` path, running `RSNN_bfd_RealValued.py` and `RSNN_bfd_SpikingBased.py` will train the model on the real-valued and spiking-based whikser sweep dataset, respectively. For example:
+```python
+#./RSNN_bfd_SpikingBased.py
+if __name__ == '__main__':  
+    train(init_b=0.04, init_w=0.06, batch_size=128)
+```
+
