@@ -14,7 +14,7 @@ Install the dependencies from the `requirements.txt` file:
 * `SparseLinear.py`: Sample the connections between neural subtypes based on projection intensities.
 * `utils.py`: Plot the neural raster, dynamic gradient, weighted degree distribution, and CV measure.
 # Dataset
-The whisker sweep dataset used was modified from this [repository](https://github.com/neuroailab/whisker_model). We are grateful to the author for providing us with the `v-hacd` processed 3D `.hdf5` files. To be frank, compiling this project was quite troublesome, so it is recommended to directly download the [.h5 files](https://pan.quark.cn/s/6d41efaccd6c) that we have processed.
+The whisker sweep dataset used was modified from this [repository](https://github.com/neuroailab/whisker_model). We are grateful to the author for providing us with the `v-hacd` processed 3D `.hdf5` files. Considering that compiling this project is not straightforward, it is recommended to directly download the [.h5 files](https://pan.quark.cn/s/6d41efaccd6c) that we have processed.
 
 The neuron types, quantities, and connection probabilities referred to by our model are from this [repository](https://github.com/DepartmentofNeurophysiology/Cortical-representation-of-touch-in-silico-NetPyne). We have replicated the network constructed based on `NetPyNE`, and then calculated the connection probabilities by `connection quantity / (the number of presynaptic neurons × the number of postsynaptic neurons)`.
 # Train
